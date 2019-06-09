@@ -82,7 +82,7 @@ const App = () => {
     const id = event.target.id
     if (window.confirm(`Delete ${name} ?`)) {
       personService.remove(id)
-      setPersons(persons.filter(person => person.id !== id))
+      setPersons(persons.filter(person => person.name !== name))
       setNotificationMessage(`Deleted ${name}`)
       setTimeout(() => {
         setNotificationMessage(null)
