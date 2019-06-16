@@ -55,6 +55,12 @@ const App = () => {
             setNotificationMessage(null)
           }, 5000)
         })
+        .catch(error => {
+          setErrorMessage(error.response.data.error)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })
     } else if (window.confirm(`${personObject.name} is already added to phonebook, replace the old number with a new one?`)) {
       const id = persons.find(person => person.name === newName).id
       personService
