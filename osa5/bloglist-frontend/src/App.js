@@ -1,82 +1,82 @@
-import React, { useState, useEffect, useRef } from "react";
-import Blog from "./components/Blog";
-import Notification from "./components/Notification";
-import blogService from "./services/blogs";
-import loginService from "./services/login";
-import Togglable from "./components/Togglable";
-import BlogForm from "./components/BlogFrom";
+import React, { useState, useEffect, useRef } from 'react'
+import Blog from './components/Blog'
+import Notification from './components/Notification'
+import blogService from './services/blogs'
+import loginService from './services/login'
+import Togglable from './components/Togglable'
+import BlogForm from './components/BlogFrom'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [blogs, setBlogs] = useState([])
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
-  const blogFormRef = useRef();
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService
       .getAll()
-      .then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)));
-  }, []);
+      .then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
+  }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedUser");
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
     }
-  }, []);
+  }, [])
 
   const addBlog = async (blogObject) => {
     try {
-      blogFormRef.current.toggleVisibility();
-      const blog = await blogService.create(blogObject);
-      setBlogs(blogs.concat(blog));
-      setErrorMessage(`A new blog has been added`);
+      blogFormRef.current.toggleVisibility()
+      const blog = await blogService.create(blogObject)
+      setBlogs(blogs.concat(blog))
+      setErrorMessage('A new blog has been added')
       setTimeout(() => {
-        setErrorMessage(null);
-      }, 3000);
+        setErrorMessage(null)
+      }, 3000)
     } catch (exception) {
-      setErrorMessage("Adding a new blogpost failed");
+      setErrorMessage('Adding a new blogpost failed')
       setTimeout(() => {
-        setErrorMessage(null);
-      }, 3000);
+        setErrorMessage(null)
+      }, 3000)
     }
-  };
+  }
 
   const removeBlog = async (blogObject) => {
     try {
-      await blogService.remove(blogObject);
-      setBlogs(blogs.filter((blog) => blog !== blogObject));
+      await blogService.remove(blogObject)
+      setBlogs(blogs.filter((blog) => blog !== blogObject))
     } catch (exception) {
-      console.log(exception);
+      console.log(exception)
     }
-  };
+  }
 
   const handleLogin = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
     try {
-      const user = await loginService.login({ username, password });
-      window.localStorage.setItem("loggedUser", JSON.stringify(user));
-      blogService.setToken(user.token);
-      setUser(user);
-      setUsername("");
-      setPassword("");
+      const user = await loginService.login({ username, password })
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      blogService.setToken(user.token)
+      setUser(user)
+      setUsername('')
+      setPassword('')
     } catch (exception) {
-      setErrorMessage("Invalid username or password");
+      setErrorMessage('Invalid username or password')
       setTimeout(() => {
-        setErrorMessage(null);
-      }, 3000);
+        setErrorMessage(null)
+      }, 3000)
     }
-  };
+  }
 
   const logout = () => {
-    window.localStorage.removeItem("loggedUser");
-    window.location.reload();
-  };
+    window.localStorage.removeItem('loggedUser')
+    window.location.reload()
+  }
 
   if (user === null) {
     return (
@@ -105,7 +105,7 @@ const App = () => {
           <button type="submit">login</button>
         </form>
       </div>
-    );
+    )
   }
 
   return (
@@ -123,7 +123,7 @@ const App = () => {
         <Blog key={blog.id} blog={blog} remove={removeBlog} user={user} />
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
