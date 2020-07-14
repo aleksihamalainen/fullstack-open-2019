@@ -1,2 +1,2 @@
-# fullstack-open-2019
+# fullstack-open
 https://fullstackopen.com/
