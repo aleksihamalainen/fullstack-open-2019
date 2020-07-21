@@ -120,7 +120,9 @@ const resolvers = {
     bookCount: () => books.length,
     authorCount: () => authors.length,
     allBooks: (root, args) => {
-      if (!args.genre) {
+      if (!args.genre && !args.author) {
+        return books
+      } else if (!args.genre) {
         return books.filter((b) => b.author === args.author);
       } else if (!args.author) {
         return books.filter((b) => b.genres.includes(args.genre));
@@ -150,8 +152,9 @@ const resolvers = {
         if (!author) {
             return null
         }
+        const index = authors.indexOf(author)
         const updatedAuthor = { ...author, born: args.setBornTo }
-        authors = authors.concat(updatedAuthor)
+        authors[index] = updatedAuthor
         return updatedAuthor
     }
   },
